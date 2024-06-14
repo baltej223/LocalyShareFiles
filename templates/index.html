@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload and Download</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto; /* Center the container horizontally */
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .progress {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: #007bff;
+            height: 100%;
+            width: 0;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Media query for screens larger than 600px (computers) */
+        @media only screen and (min-width: 800px) {
+            .container {
+                width: 90%;
+                margin: 20px auto; /* Center the container horizontally */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="files[]" multiple>
+            <input type="submit" value="Upload">
+            <br>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"></div>
+            </div>
+        </form>
+
+        <h1>File Download</h1>
+        <ul>
+            {% for file in files %}
+            <li><a href="/download/{{ file }}">{{ file }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector('form');
+            const progressBar = document.querySelector('.progress-bar');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', '/upload');
+                xhr.upload.onprogress = function (e) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percent + '%';
+                };
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        progressBar.style.width = '100%';
+                        setTimeout(() => {
+                            progressBar.style.width = '0%';
+                        }, 1000); // Reset progress bar after 1 second
+                    }
+                };
+
+                xhr.send(formData);
+            });
+        });
+    </script>
+</body>
+</html>
