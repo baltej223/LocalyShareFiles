@@ -4,4 +4,4 @@ deploy main.py and open if from other local devices, upload from client and get 
 
 ## Example video: 
 
-([![Watch the video](https://raw.githubusercontent.com/yourusername/yourrepository/main/assets/thumbnail.jpg)](https://raw.githubusercontent.com/yourusername/yourrepository/main/assets/video.mp4))
+([![Watch the video](https://raw.githubusercontent.com/yourusername/yourrepository/main/thumbnail.jpg)](https://raw.githubusercontent.com/yourusername/yourrepository/main/video.mp4))
